@@ -59,6 +59,70 @@
 
 <script>
 
+// keeping track of mouse position
+const mousePosition = {
+    x : 0,
+    y: 0
+};
+
+// keeping track of dots on/off screen
+var drawID = 0;
+
+//random number generator
+function getRandomNumber(min, max) {
+    return Math.round(Math.random() * (max - min + 1)) + min;
+  };
+
+// adding event listener
+window.addEventListener('mousemove', onMove)
+
+//decalaring function
+function onMove(mouseMoveEvent) {
+    mousePosition.x = mouseMoveEvent.pageX;
+    mousePosition.y = mouseMoveEvent.pageY; 
+}
+
+//Setting draw with intervall
+function draw() {
+    return setInterval(function() { 
+        const container = document.getElementById('wrap');
+//     alert('Dies ist nur eine Testnachricht'); 
+// }, 3000);
+
+    const color = `background:rgb(${getRandomNumber(
+        0,
+        255
+    )},${getRandomNumber(0, 255)}, ${getRandomNumber(0, 255)});`;
+    const ballSize = getRandomNumber(10, 30);
+    const size = `height:${ballSize}px; width:${ballSize}px;`;
+    const left = `left:${getRandomNumber(
+        mousePosition.x - ballSize,
+        mousePosition.x
+    )}px;`;
+    const top = `top:${getRandomNumber(
+        mousePosition.y - ballSize,
+        mousePosition.y
+    )}px; `;
+    const style = `${left}${top}${color}${size}`;
+
+    const ball = document.createElement('div');
+    ball.classList.add('ball');
+    ball.style = style;
+
+    ball.addEventListener('animationend', function onMove(mouseMoveEvent) {
+        onMove.target.remove();
+    });
+
+    container.appendChild(ball);
+    }, 50);
+}
+window.addEventListener('mouseover', function() {
+    drawID = draw();
+});
+
+window.addEventListener('mouseout', function() {
+    clearInterval(drawID);
+});
 </script>
 
 </html>
